@@ -1,4 +1,7 @@
 # CGM LLM Assistant
+
+![CI](https://github.com/sdysch/cgm-llm-assistant/actions/workflows/ci.yml/badge.svg)
+
 A small project for exploring continuous glucose monitor (CGM) data and generating natural language explanations of glucose trends using large language models.
 
 This project is intended to be used with my Medtronic Guardian 4 CGM data, using the raw export from the website.
