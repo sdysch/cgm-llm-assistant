@@ -1,6 +1,19 @@
 # CGM LLM Assistant
 A small project for exploring continuous glucose monitor (CGM) data and generating natural language explanations of glucose trends using large language models.
 
+This project is intended to be used with my Medtronic Guardian 4 CGM data, using the raw export from the website.
+Compatibility with other CGM sources is not intended, but could be hacked.
+
+Example dataframe:
+```python
+           Date      Time  bg_mmol  sg_mmol
+526  2026/02/23  22:00:32      NaN      9.2
+527  2026/02/23  21:55:32      NaN      9.0
+528  2026/02/23  21:50:32      NaN      8.9
+529  2026/02/23  21:45:32      NaN      8.7
+530  2026/02/23  21:40:32      NaN      8.5
+```
+
 The goal is to make it easy to answer questions like:
 
 * When do my glucose spikes happen most often?
@@ -16,6 +29,7 @@ The goal is to make it easy to answer questions like:
 * Generate trend summaries
 * Explain glucose patterns using an LLM
 * Interactive dashboard for exploration
+* Integrate bolus wizard, autobolus info
 
 ## Example Questions
 
