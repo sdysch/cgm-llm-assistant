@@ -3,6 +3,7 @@ from dataclasses import dataclass
 
 GLUCOSE_COL = "sg_mmol"
 BG_COL = "bg_mmol"
+TIMESTAMP_COL = "timestamp"
 
 
 @dataclass(frozen=True)
