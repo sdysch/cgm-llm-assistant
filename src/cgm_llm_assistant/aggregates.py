@@ -69,14 +69,17 @@ def multi_window_resample(
 
 def hourly_profile(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Average glucose by hour of day.
+    Hourly glucose profile grouped by day.
     """
 
-    logger.info("Computing hourly glucose profile")
+    logger.info("Computing hourly glucose profile by day")
 
     profile = (
-        df.assign(hour=df[TIMESTAMP_COL].dt.hour)
-        .groupby("hour")[GLUCOSE_COL]
+        df.assign(
+            date=df[TIMESTAMP_COL].dt.date,
+            hour=df[TIMESTAMP_COL].dt.hour,
+        )
+        .groupby(["date", "hour"])[GLUCOSE_COL]
         .agg(
             mean="mean",
             std="std",
@@ -89,14 +92,17 @@ def hourly_profile(df: pd.DataFrame) -> pd.DataFrame:
 
 def weekday_profile(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Average glucose by weekday.
+    Weekday profile grouped by day.
     """
 
-    logger.info("Computing weekday glucose profile")
+    logger.info("Computing weekday profile by day")
 
     profile = (
-        df.assign(weekday=df[TIMESTAMP_COL].dt.day_name())
-        .groupby("weekday")[GLUCOSE_COL]
+        df.assign(
+            date=df[TIMESTAMP_COL].dt.date,
+            weekday=df[TIMESTAMP_COL].dt.day_name(),
+        )
+        .groupby(["date", "weekday"])[GLUCOSE_COL]
         .agg(
             mean="mean",
             std="std",

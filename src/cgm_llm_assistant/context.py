@@ -1,5 +1,7 @@
 import logging
 
+import pandas as pd
+
 from cgm_llm_assistant.metrics import compute_summary_metrics
 from cgm_llm_assistant.aggregates import (
     hourly_profile,
@@ -29,11 +31,21 @@ def build_context(df):
 
     logger.info("Context built successfully with %d window aggregates", len(windows))
 
+    hourly_dict = {}
+    for (date, hour), row in hourly.iterrows():
+        date_str = str(date)
+        if date_str not in hourly_dict:
+            hourly_dict[date_str] = {}
+        hourly_dict[date_str][f"hour_{hour}"] = {
+            "mean": row["mean"],
+            "std": row["std"] if pd.notna(row["std"]) else None,
+            "count": int(row["count"]),
+        }
+
     context = {
         "summary_metrics": summary,
-        "hourly_profile": hourly.to_dict(),
+        "hourly_profile": hourly_dict,
         "daily_metrics": daily.to_dict(),
-        # Time-window aggregates
         "window_aggregates": {
             f"{minutes}_min": agg.reset_index().to_dict(orient="records")
             for minutes, agg in windows.items()
