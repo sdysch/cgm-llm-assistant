@@ -1,5 +1,8 @@
+import logging
 import pandas as pd
 from cgm_llm_assistant.constants import GLUCOSE_COL, GlucoseThresholds
+
+logger = logging.getLogger(__name__)
 
 
 def average_glucose(df: pd.DataFrame) -> float:
@@ -12,7 +15,9 @@ def average_glucose(df: pd.DataFrame) -> float:
     Returns:
         Average glucose as a float.
     """
-    return df[GLUCOSE_COL].mean()
+    mean = df[GLUCOSE_COL].mean()
+    logger.debug(f"Returning {mean}")
+    return mean
 
 
 def time_in_range(
@@ -28,9 +33,11 @@ def time_in_range(
     Returns:
         Time-in-range as a float between 0 and 1.
     """
-    return (
+    tir = (
         (df[GLUCOSE_COL] >= thresholds.LOW) & (df[GLUCOSE_COL] <= thresholds.HIGH)
     ).mean()
+    logger.debug(f"Returning {tir}")
+    return tir
 
 
 def high_events(
@@ -46,7 +53,9 @@ def high_events(
     Returns:
         Number of high events as an integer.
     """
-    return (df[GLUCOSE_COL] > thresholds.HIGH).sum()
+    high = (df[GLUCOSE_COL] > thresholds.HIGH).sum()
+    logger.debug(f"Returning {high}")
+    return high
 
 
 def low_events(
@@ -62,7 +71,9 @@ def low_events(
     Returns:
         Number of low events as an integer.
     """
-    return (df[GLUCOSE_COL] < thresholds.LOW).sum()
+    low = (df[GLUCOSE_COL] < thresholds.LOW).sum()
+    logger.debug(f"Returning {low}")
+    return low
 
 
 def coefficient_of_variation(df: pd.DataFrame) -> float:
@@ -76,4 +87,6 @@ def coefficient_of_variation(df: pd.DataFrame) -> float:
         Coefficient of variation as a float.
     """
     avg = average_glucose(df)
-    return df[GLUCOSE_COL].std() / avg if avg else 0.0
+    cv = df[GLUCOSE_COL].std() / avg if avg else 0.0
+    logger.debug(f"Returning {cv}")
+    return cv
