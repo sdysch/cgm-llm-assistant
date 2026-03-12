@@ -122,31 +122,6 @@ def glucose_std(df: pd.DataFrame) -> float:
     return std
 
 
-def compute_summary_metrics(
-    df: pd.DataFrame, thresholds: GlucoseThresholds = GlucoseThresholds()
-) -> dict:
-    """
-    Compute a dictionary of summary glucose metrics.
-
-    Parameters:
-        df: DataFrame with a 'glucose' column.
-        thresholds: GlucoseThresholds object with LOW and HIGH values.
-
-    Returns:
-        Dictionary containing avg_glucose, median_glucose, std_glucose, cv,
-        time_in_range, high_events, and low_events.
-    """
-    return {
-        "avg_glucose": average_glucose(df),
-        "median_glucose": median_glucose(df),
-        "std_glucose": glucose_std(df),
-        "cv": coefficient_of_variation(df),
-        "time_in_range": time_in_range(df, thresholds),
-        "high_events": high_events(df, thresholds),
-        "low_events": low_events(df, thresholds),
-    }
-
-
 __all__ = [
     "average_glucose",
     "median_glucose",
@@ -155,5 +130,4 @@ __all__ = [
     "time_in_range",
     "high_events",
     "low_events",
-    "compute_summary_metrics",
 ]
