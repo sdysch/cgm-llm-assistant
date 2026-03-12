@@ -45,6 +45,7 @@ The assistant aims to answer questions such as:
 ## Setup
 
 This project uses `uv` for dependency and environment management.
+For testing local LLMS, use [ollama](https://ollama.com/).
 
 Install dependencies:
 ```bash
@@ -75,6 +76,20 @@ Lint code:
 
 ```bash
 uv run ruff check
+```
+
+## Sending to LLM (WIP)
+
+Pull a local model:
+
+```bash
+ollama pull llama3.2
+```
+
+Start the local service:
+
+```bash
+ollama serve
 ```
 
 ## Disclaimer
