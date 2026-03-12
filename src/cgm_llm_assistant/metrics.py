@@ -90,3 +90,70 @@ def coefficient_of_variation(df: pd.DataFrame) -> float:
     cv = df[GLUCOSE_COL].std() / avg if avg else 0.0
     logger.debug(f"Returning {cv}")
     return cv
+
+
+def median_glucose(df: pd.DataFrame) -> float:
+    """
+    Compute the median glucose value.
+
+    Parameters:
+        df: DataFrame with a 'glucose' column.
+
+    Returns:
+        Median glucose as a float.
+    """
+    median = df[GLUCOSE_COL].median()
+    logger.debug(f"Returning {median}")
+    return median
+
+
+def glucose_std(df: pd.DataFrame) -> float:
+    """
+    Compute the standard deviation of glucose values.
+
+    Parameters:
+        df: DataFrame with a 'glucose' column.
+
+    Returns:
+        Standard deviation as a float.
+    """
+    std = df[GLUCOSE_COL].std()
+    logger.debug(f"Returning {std}")
+    return std
+
+
+def compute_summary_metrics(
+    df: pd.DataFrame, thresholds: GlucoseThresholds = GlucoseThresholds()
+) -> dict:
+    """
+    Compute a dictionary of summary glucose metrics.
+
+    Parameters:
+        df: DataFrame with a 'glucose' column.
+        thresholds: GlucoseThresholds object with LOW and HIGH values.
+
+    Returns:
+        Dictionary containing avg_glucose, median_glucose, std_glucose, cv,
+        time_in_range, high_events, and low_events.
+    """
+    return {
+        "avg_glucose": average_glucose(df),
+        "median_glucose": median_glucose(df),
+        "std_glucose": glucose_std(df),
+        "cv": coefficient_of_variation(df),
+        "time_in_range": time_in_range(df, thresholds),
+        "high_events": high_events(df, thresholds),
+        "low_events": low_events(df, thresholds),
+    }
+
+
+__all__ = [
+    "average_glucose",
+    "median_glucose",
+    "glucose_std",
+    "coefficient_of_variation",
+    "time_in_range",
+    "high_events",
+    "low_events",
+    "compute_summary_metrics",
+]
