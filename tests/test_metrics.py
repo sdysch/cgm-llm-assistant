@@ -8,13 +8,13 @@ from cgm_llm_assistant.metrics import (
     low_events,
     coefficient_of_variation,
 )
-from cgm_llm_assistant.constants import GlucoseThresholds
+from cgm_llm_assistant.constants import GLUCOSE_COL, GlucoseThresholds
 
 
 @pytest.fixture
 def sample_df():
     """Return a small DataFrame of glucose readings for testing."""
-    return pd.DataFrame({"sg_mmol": [3.5, 4.2, 5.5, 9.8, 10.5, 7.0]})
+    return pd.DataFrame({GLUCOSE_COL: [3.5, 4.2, 5.5, 9.8, 10.5, 7.0]})
 
 
 def test_average_glucose(sample_df):
@@ -46,6 +46,6 @@ def test_low_events(sample_df):
 
 def test_coefficient_of_variation(sample_df):
     avg = average_glucose(sample_df)
-    expected_cv = sample_df["sg_mmol"].std() / avg
+    expected_cv = sample_df[GLUCOSE_COL].std() / avg
     result = coefficient_of_variation(sample_df)
     assert abs(result - expected_cv) < 1e-6

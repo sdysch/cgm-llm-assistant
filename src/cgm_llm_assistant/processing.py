@@ -3,6 +3,8 @@ import logging
 import pandas as pd
 from pathlib import Path
 
+from cgm_llm_assistant.constants import GLUCOSE_COL, BG_COL
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,11 +31,11 @@ def load_cgm_csv(path: str | Path) -> pd.DataFrame:
 
     # Rename columns
     df = df.rename(
-        columns={"BG Reading (mmol/L)": "bg_mmol", "Sensor Glucose (mmol/L)": "sg_mmol"}
+        columns={"BG Reading (mmol/L)": BG_COL, "Sensor Glucose (mmol/L)": GLUCOSE_COL}
     )
 
     # Drop rows where glucose is NaN
-    df = df.dropna(subset=["sg_mmol"])
+    df = df.dropna(subset=[GLUCOSE_COL])
     logger.debug(f"Dropped rows with missing glucose, remaining: {len(df)}")
 
     # Combine date and time into datetime
@@ -46,6 +48,6 @@ def load_cgm_csv(path: str | Path) -> pd.DataFrame:
     logger.debug("Sorted by timestamp")
 
     # Keep only relevant columns
-    result = df[["timestamp", "bg_mmol", "sg_mmol"]]
+    result = df[["timestamp", BG_COL, GLUCOSE_COL]]
     logger.info(f"Loaded {len(result)} CGM records")
     return result
