@@ -12,7 +12,7 @@ def average_glucose(df: pd.DataFrame) -> float:
     Returns:
         Average glucose as a float.
     """
-    return df["glucose"].mean()
+    return df["sg_mmol"].mean()
 
 
 def time_in_range(
@@ -29,7 +29,7 @@ def time_in_range(
         Time-in-range as a float between 0 and 1.
     """
     return (
-        (df["glucose"] >= thresholds.LOW) & (df["glucose"] <= thresholds.HIGH)
+        (df["sg_mmol"] >= thresholds.LOW) & (df["sg_mmol"] <= thresholds.HIGH)
     ).mean()
 
 
@@ -46,7 +46,7 @@ def high_events(
     Returns:
         Number of high events as an integer.
     """
-    return (df["glucose"] > thresholds.HIGH).sum()
+    return (df["sg_mmol"] > thresholds.HIGH).sum()
 
 
 def low_events(
@@ -62,7 +62,7 @@ def low_events(
     Returns:
         Number of low events as an integer.
     """
-    return (df["glucose"] < thresholds.LOW).sum()
+    return (df["sg_mmol"] < thresholds.LOW).sum()
 
 
 def coefficient_of_variation(df: pd.DataFrame) -> float:
@@ -76,4 +76,4 @@ def coefficient_of_variation(df: pd.DataFrame) -> float:
         Coefficient of variation as a float.
     """
     avg = average_glucose(df)
-    return df["glucose"].std() / avg if avg else 0.0
+    return df["sg_mmol"].std() / avg if avg else 0.0
