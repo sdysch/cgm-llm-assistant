@@ -24,9 +24,17 @@ def explain_metrics(context: dict, question: str, model: str) -> str:
     response = ollama.chat(
         model=model,
         messages=[{"role": "user", "content": prompt}],
+        stream=True,
     )
 
-    return response["message"]["content"]
+    full_response = ""
+    # Stream response
+    for chunk in response:
+        content = chunk["message"]["content"]
+        print(content, end="", flush=True)
+        full_response += content
+    print()
+    return full_response
 
 
 def check_ollama():
