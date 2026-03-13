@@ -111,6 +111,12 @@ The UI provides:
 - Interactive chat interface to ask questions about your CGM data
 - Data summary view with record count and date range
 
+### Interactive Dashboard (TODO)
+
+```bash
+uv run streamlit run src/cgm_llm_assistant/dashboard.py
+```
+
 ### Setting up Ollama
 
 For local LLM inference, install and run [ollama](https://ollama.com/):
