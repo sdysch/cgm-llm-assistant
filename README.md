@@ -99,6 +99,24 @@ uv run cgm-assistant data/example_CGM_data_raw.csv --model my_model
 uv run streamlit run src/cgm_llm_assistant/dashboard.py
 ```
 
+### Streamlit UI
+
+Launch the Streamlit web interface:
+
+```bash
+# Default model (phi3:mini)
+uv run cgm-assistant-ui
+
+# Specify a different model
+uv run cgm-assistant-ui --model=llama2
+```
+
+The UI provides:
+- Option to upload a CSV file or select from files in `data/`
+- Dropdown menu to choose CSV files from the `data/` directory
+- Interactive chat interface to ask questions about your CGM data
+- Data summary view with record count and date range
+
 ### Setting up Ollama
 
 For local LLM inference, install and run [ollama](https://ollama.com/):
