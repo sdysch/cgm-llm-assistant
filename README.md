@@ -8,6 +8,8 @@ A project for exploring continuous glucose monitor (CGM) data and generating nat
 
 ## Example Output
 
+![CLI Demo](pics/cli_demo.png)
+
 ```python
            Date      Time  bg_mmol  sg_mmol
 526  2026/02/23  22:00:32      NaN      9.2
@@ -122,3 +124,8 @@ ollama pull phi3:mini
 
 This project is for data exploration and educational purposes only.
 It is not medical advice and should not be used for clinical decisions.
+
+## To do
+- [ ] Wrap ollama inside openai API
+- [ ] Calculate and send info relevant to prompt (sending everything is unnecessary and expensive). LangChain?
+- [ ] Basic streamlit app for UI demo
