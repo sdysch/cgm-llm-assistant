@@ -1,13 +1,48 @@
 import click
+import logging
+import ollama
 
 from cgm_llm_assistant.processing import load_cgm_csv
 from cgm_llm_assistant.context import build_context
-from cgm_llm_assistant.llm import explain_metrics
+from cgm_llm_assistant.llm import check_model, explain_metrics
+
+logger = logging.getLogger(__name__)
+
+
+system_logger = logging.getLogger("cgm_llm_assistant")
 
 
 @click.command()
 @click.argument("file")
-def main(file):
+@click.option("--models", default="phi3:mini", help="Model to use for inference")
+def main(file, models):
+    try:
+        model_available = check_model(models)
+    except Exception as e:
+        system_logger.exception("Error checking model")
+        try:
+            models_list = ollama.list()
+            available = [m.get("name", "") for m in models_list.get("models", [])]
+        except Exception:
+            available = []
+        system_logger.error(f"Available models: {available}")
+        raise click.ClickException(f"Error checking model: {e}")
+
+    if not model_available:
+        try:
+            models_list = ollama.list()
+            available = [m.get("name", "") for m in models_list.get("models", [])]
+        except Exception:
+            logger.exception("Failed to list available models")
+            available = []
+        try:
+            raise RuntimeError(
+                f"Model '{models}' not found, install with 'ollama pull {models}'"
+            )
+        except RuntimeError:
+            logger.exception("Exiting due to missing model")
+            raise
+
     df = load_cgm_csv(file)
     context = build_context(df)
 
@@ -21,7 +56,7 @@ def main(file):
         question = click.prompt("\n>", type=str, prompt_suffix="")
         if question.lower() in {"exit", "quit"}:
             break
-        answer = explain_metrics(context, question)
+        answer = explain_metrics(context, question, model=models)
         click.echo(click.style(f"\n{answer}", fg="green"))
 
 

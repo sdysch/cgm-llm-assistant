@@ -5,7 +5,7 @@ import ollama
 logger = logging.getLogger(__name__)
 
 
-def explain_metrics(context: dict, question: str, model: str = "llama3.2") -> str:
+def explain_metrics(context: dict, question: str, model: str) -> str:
     """
     Send structured CGM context + question to local LLM.
     """
@@ -42,3 +42,20 @@ def check_ollama():
         raise RuntimeError(
             "Ollama is not running. Start it with `ollama serve`."
         ) from e
+
+
+def check_model(model: str) -> bool:
+    """
+    Check if the requested model is available.
+    Returns True if model is found, False otherwise.
+    """
+    try:
+        models = ollama.list()
+        model_names = [
+            m.get("name", "").split(":")[0] for m in models.get("models", [])
+        ]
+        available = [m.get("name", "") for m in models.get("models", [])]
+        return model in available or model.split(":")[0] in model_names
+    except Exception as e:
+        logger.exception("Failed to list models")
+        raise RuntimeError("Failed to list models. Is Ollama running?") from e
