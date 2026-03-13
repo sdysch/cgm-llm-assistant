@@ -93,6 +93,24 @@ Specify a different model (must be installed first):
 uv run cgm-assistant data/example_CGM_data_raw.csv --model my_model
 ```
 
+### Streamlit UI (WIP)
+
+Launch the Streamlit web interface:
+
+```bash
+# Default model (phi3:mini)
+uv run streamlit run src/cgm_llm_assistant/ui/app.py
+
+# Or from the project root directory
+streamlit run src/cgm_llm_assistant/ui/app.py
+```
+
+The UI provides:
+- Option to upload a CSV file or select from files in `data/`
+- Dropdown menu to choose CSV files from the `data/` directory
+- Interactive chat interface to ask questions about your CGM data
+- Data summary view with record count and date range
+
 ### Interactive Dashboard (TODO)
 
 ```bash
