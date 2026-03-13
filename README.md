@@ -78,18 +78,12 @@ Lint code:
 uv run ruff check
 ```
 
-## Sending to LLM (WIP)
+## Running the demo CLI assistant
 
-Pull a local model:
-
-```bash
-ollama pull llama3.2
-```
-
-Start the local service:
+This reads a default example file, webapp is WIP
 
 ```bash
-ollama serve
+uv run cgm-assistant data/example.csv
 ```
 
 ## Disclaimer

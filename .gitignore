@@ -11,6 +11,7 @@ wheels/
 
 # Data
 data/
+! data/example.csv
 
 # Environment managers
 .envrc
