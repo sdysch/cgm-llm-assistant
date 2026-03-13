@@ -30,7 +30,7 @@ def compute_summary_metrics(
         Dictionary containing avg_glucose, median_glucose, std_glucose, cv,
         time_in_range, high_events, and low_events.
     """
-    logger.info("Computing summary metrics")
+    logger.debug("Computing summary metrics")
     result = {
         "avg_glucose": average_glucose(df),
         "median_glucose": median_glucose(df),
