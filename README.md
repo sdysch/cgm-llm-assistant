@@ -93,22 +93,16 @@ Specify a different model (must be installed first):
 uv run cgm-assistant data/example_CGM_data_raw.csv --model my_model
 ```
 
-### Interactive Dashboard (TODO)
-
-```bash
-uv run streamlit run src/cgm_llm_assistant/dashboard.py
-```
-
-### Streamlit UI
+### Streamlit UI (WIP)
 
 Launch the Streamlit web interface:
 
 ```bash
 # Default model (phi3:mini)
-uv run cgm-assistant-ui
+uv run streamlit run src/cgm_llm_assistant/ui/app.py
 
-# Specify a different model
-uv run cgm-assistant-ui --model=llama2
+# Or from the project root directory
+streamlit run src/cgm_llm_assistant/ui/app.py
 ```
 
 The UI provides:

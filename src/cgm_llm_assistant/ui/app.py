@@ -129,14 +129,4 @@ def main(model: str = "phi3:mini"):
 
 
 if __name__ == "__main__":
-    import sys
-
-    model = "phi3:mini"
-    if len(sys.argv) > 1 and sys.argv[1].startswith("--model="):
-        model = sys.argv[1].split("=", 1)[1]
-    elif "--model" in sys.argv:
-        idx = sys.argv.index("--model")
-        if idx + 1 < len(sys.argv):
-            model = sys.argv[idx + 1]
-
-    main(model=model)
+    main()

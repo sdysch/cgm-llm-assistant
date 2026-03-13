@@ -37,4 +37,3 @@ addopts = "-ra -q -vv"
 
 [project.scripts]
 cgm-assistant = "cgm_llm_assistant.cli_demo:main"
-cgm-assistant-ui = "cgm_llm_assistant.ui.app:main"
