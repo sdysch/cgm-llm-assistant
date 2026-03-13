@@ -17,7 +17,7 @@ def build_context(df):
 
     logger.info("Building context from glucose DataFrame")
 
-    logger.debug("Computing summary metrics")
+    logger.info("Computing summary metrics")
     summary = compute_summary_metrics(df)
 
     logger.debug("Computing hourly profile")
@@ -44,12 +44,7 @@ def build_context(df):
 
     context = {
         "summary_metrics": summary,
-        "hourly_profile": hourly_dict,
         "daily_metrics": daily.to_dict(),
-        "window_aggregates": {
-            f"{minutes}_min": agg.reset_index().to_dict(orient="records")
-            for minutes, agg in windows.items()
-        },
     }
 
     logger.debug(f"Returning context: {context}")

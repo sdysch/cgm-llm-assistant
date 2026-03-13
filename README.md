@@ -2,81 +2,130 @@
 
 ![CI](https://github.com/sdysch/cgm-llm-assistant/actions/workflows/ci.yml/badge.svg)
 
-A small project for exploring continuous glucose monitor (CGM) data and generating natural language explanations of glucose trends using large language models.
+A project for exploring continuous glucose monitor (CGM) data and generating natural language explanations of glucose trends using large language models.
 
-This project is intended to be used with my Medtronic Guardian 4 CGM data, using the raw export from the website.
-Compatibility with other CGM sources is not intended, but could be hacked.
+> **Note**: This project is designed for Medtronic Guardian 4 CGM data exported from the website. Other CGM sources may require adaptation.
 
-Example dataframe:
+## Example Output
+
+![CLI Demo](pics/cli_demo.png)
+
 ```python
            Date      Time  bg_mmol  sg_mmol
 526  2026/02/23  22:00:32      NaN      9.2
 527  2026/02/23  21:55:32      NaN      9.0
-528  2026/02/23  21:50:32      NaN      8.9
-529  2026/02/23  21:45:32      NaN      8.7
-530  2026/02/23  21:40:32      NaN      8.5
 ```
 
-The goal is to make it easy to answer questions like:
+## Prerequisites
 
-* When do my glucose spikes happen most often?
-* How stable is my overnight glucose?
-* What patterns appear across days or weeks?
-* The project processes CGM exports, computes common glucose metrics, and produces summaries that can be interpreted by an LLM.
+- Python 3.13+
+- [uv](https://github.com/astral-sh/uv) for dependency management
+- [ollama](https://ollama.com/) (optional, for local LLM inference)
 
-## Features (planned / in progress)
+## Quick Start
 
-* Load CGM data from CSV exports
-* Compute common CGM metrics
-* Detect glucose spikes and lows
-* Generate trend summaries
-* Explain glucose patterns using an LLM
-* Interactive dashboard for exploration
-* Integrate bolus wizard, autobolus info
+```bash
+# 1. Install dependencies
+uv sync
 
-## Example Questions
+# 2. Pull an LLM model 
+ollama pull phi3:mini
 
-The assistant aims to answer questions such as:
-* Why did my glucose spike yesterday?
-* What time of day has the most variability?
-* Are my overnight readings stable?
-* Which days had the best time-in-range?
+# 3. Run the assistant
+uv run cgm-assistant data/example_CGM_data_raw.csv
+```
 
-## Setup
+## Installation
 
-This project uses `uv` for dependency and environment management.
+### 1. Install uv
 
-Install dependencies:
+If you don't have `uv` installed, follow the [official guide](https://docs.astral.sh/uv/#installation) or use:
+
+### 2. Install dependencies
+
 ```bash
 uv sync
 ```
 
-Activate the environment:
+This creates a virtual environment and installs all dependencies automatically.
+
+### 3. Activate the environment (optional)
 
 ```bash
 source .venv/bin/activate
 ```
 
+Alternatively, use `uv run` to execute commands in the environment without activating it.
+
 ## Development
 
-Install development dependencies:
+### Install dev dependencies
 
 ```bash
 uv sync --group dev
 ```
 
-Run tests:
+### Run tests
 
 ```bash
 uv run pytest
 ```
 
-Lint code:
+### Lint code
 
 ```bash
 uv run ruff check
 ```
 
+## Usage
+
+### CLI
+
+Process a CGM export file:
+
+```bash
+uv run cgm-assistant data/example_CGM_data_raw.csv
+```
+
+Specify a different model (must be installed first):
+
+```bash
+uv run cgm-assistant data/example_CGM_data_raw.csv --model my_model
+```
+
+### Interactive Dashboard (TODO)
+
+```bash
+uv run streamlit run src/cgm_llm_assistant/dashboard.py
+```
+
+### Setting up Ollama
+
+For local LLM inference, install and run [ollama](https://ollama.com/):
+
+```bash
+# Start ollama server
+ollama serve
+
+# Pull a model
+ollama pull phi3:mini
+```
+
+## Features
+
+- Load CGM data from CSV exports
+- Compute common CGM metrics (time-in-range, etc.)
+- Explain glucose patterns using an LLM (in progress)
+- Detect glucose spikes and lows (todo)
+- Generate trend summaries (todo)
+- Interactive dashboard for exploration (todo)
+
 ## Disclaimer
+
 This project is for data exploration and educational purposes only.
 It is not medical advice and should not be used for clinical decisions.
+
+## To do
+- [ ] Wrap ollama inside openai API
+- [ ] Calculate and send info relevant to prompt (sending everything is unnecessary and expensive). LangChain?
+- [ ] Basic streamlit app for UI demo
