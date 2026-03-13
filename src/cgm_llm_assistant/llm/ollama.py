@@ -9,8 +9,6 @@ def explain_metrics(context: dict, question: str, model: str) -> str:
     """
     Send structured CGM context + question to local LLM.
     """
-    logger.info(f"Calling LLM with model: {model}")
-
     prompt = f"""
     You are a health assistant analysing continuous glucose monitor data.
 
@@ -51,10 +49,8 @@ def check_model(model: str) -> bool:
     """
     try:
         models = ollama.list()
-        model_names = [
-            m.get("name", "").split(":")[0] for m in models.get("models", [])
-        ]
-        available = [m.get("name", "") for m in models.get("models", [])]
+        model_names = [m.model.split(":")[0] for m in models.models]
+        available = [m.model for m in models.models]
         return model in available or model.split(":")[0] in model_names
     except Exception as e:
         logger.exception("Failed to list models")

@@ -14,15 +14,15 @@ system_logger = logging.getLogger("cgm_llm_assistant")
 
 @click.command()
 @click.argument("file")
-@click.option("--models", default="phi3:mini", help="Model to use for inference")
-def main(file, models):
+@click.option("--model", default="phi3:mini", help="Model to use for inference")
+def main(file, model):
     try:
-        model_available = check_model(models)
+        model_available = check_model(model)
     except Exception as e:
         system_logger.exception("Error checking model")
         try:
             models_list = ollama.list()
-            available = [m.get("name", "") for m in models_list.get("models", [])]
+            available = [m.model for m in models_list.models]
         except Exception:
             available = []
         system_logger.error(f"Available models: {available}")
@@ -31,17 +31,19 @@ def main(file, models):
     if not model_available:
         try:
             models_list = ollama.list()
-            available = [m.get("name", "") for m in models_list.get("models", [])]
+            available = [m.model for m in models_list.models]
         except Exception:
             logger.exception("Failed to list available models")
             available = []
         try:
             raise RuntimeError(
-                f"Model '{models}' not found, install with 'ollama pull {models}'"
+                f"Model '{model}' not found, install with 'ollama pull {model}'"
             )
         except RuntimeError:
             logger.exception("Exiting due to missing model")
             raise
+
+    system_logger.info(f"Using model: {model}")
 
     df = load_cgm_csv(file)
     context = build_context(df)
@@ -56,7 +58,7 @@ def main(file, models):
         question = click.prompt("\n>", type=str, prompt_suffix="")
         if question.lower() in {"exit", "quit"}:
             break
-        answer = explain_metrics(context, question, model=models)
+        answer = explain_metrics(context, question, model=model)
         click.echo(click.style(f"\n{answer}", fg="green"))
 
 
