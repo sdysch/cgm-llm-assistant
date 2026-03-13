@@ -9,7 +9,7 @@ from cgm_llm_assistant.llm import check_model, explain_metrics
 logger = logging.getLogger(__name__)
 
 
-system_logger = logging.getLogger("cgm_llm_assistant")
+logger = logging.getLogger("cgm_llm_assistant")
 
 
 @click.command()
@@ -19,13 +19,13 @@ def main(file, model):
     try:
         model_available = check_model(model)
     except Exception as e:
-        system_logger.exception("Error checking model")
+        logger.exception("Error checking model")
         try:
             models_list = ollama.list()
             available = [m.model for m in models_list.models]
         except Exception:
             available = []
-        system_logger.error(f"Available models: {available}")
+        logger.error(f"Available models: {available}")
         raise click.ClickException(f"Error checking model: {e}")
 
     if not model_available:
@@ -43,9 +43,17 @@ def main(file, model):
             logger.exception("Exiting due to missing model")
             raise
 
-    system_logger.info(f"Using model: {model}")
+    logger.info(f"Using model: {model}")
 
     df = load_cgm_csv(file)
+
+    if df.shape[0] == 0:
+        logger.warning("No records to process, exiting")
+        click.echo(
+            click.style("No valid CGM records found in file, exiting.", fg="yellow")
+        )
+        return
+
     context = build_context(df)
 
     click.echo(

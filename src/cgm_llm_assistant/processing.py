@@ -36,7 +36,13 @@ def load_cgm_csv(path: str | Path) -> pd.DataFrame:
 
     # Drop rows where glucose is NaN
     df = df.dropna(subset=[GLUCOSE_COL])
-    logger.debug(f"Dropped rows with missing glucose, remaining: {len(df)}")
+
+    # Terminate early if no records remaining
+    if df.shape[0] == 0:
+        logger.warning("No valid glucose records found in CSV, exiting")
+        return pd.DataFrame(columns=["timestamp", BG_COL, GLUCOSE_COL])
+
+    logger.debug(f"Dropped rows with missing glucose, remaining: {df.shape[0]}")
 
     # Combine date and time into datetime
     df["timestamp"] = pd.to_datetime(
